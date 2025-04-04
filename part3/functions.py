@@ -63,3 +63,14 @@ def calculate_sessions_per_user(sessions):
     avg_sessions = sessions_per_user.groupby("month")["sessions_count"].mean().reset_index()
     avg_sessions.columns = ["month", "avg_sessions_per_user"]
     return avg_sessions
+
+# 3.7
+def calculate_progression(file_path, bin_size=10):
+    df = pd.read_csv(file_path)
+    df = df.dropna(subset=["CurrentSessionLength", "LevelProgressionAmount"])
+
+    df["SessionBin"] = (df["CurrentSessionLength"] // bin_size) * bin_size  
+
+    grouped = df.groupby("SessionBin")["LevelProgressionAmount"].agg(["mean", "median"]).reset_index()
+
+    return grouped
