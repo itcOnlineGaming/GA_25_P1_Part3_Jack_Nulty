@@ -74,3 +74,15 @@ def calculate_progression(file_path, bin_size=10):
     grouped = df.groupby("SessionBin")["LevelProgressionAmount"].agg(["mean", "median"]).reset_index()
 
     return grouped
+
+# 3.8
+def get_peak_play_hours(file_path):
+    df = pd.read_csv(file_path)
+
+    # Convert Time_utc to datetime object
+    df["Time_utc"] = pd.to_datetime(df["Time_utc"], errors="coerce")
+
+    # Extract the hour of day (0 to 23)
+    df["Hour"] = df["Time_utc"].dt.hour
+
+    return df
